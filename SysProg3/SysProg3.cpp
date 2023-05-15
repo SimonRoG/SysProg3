@@ -25,10 +25,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     hEdit = CreateWindowEx(0, _T("EDIT"), NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | ES_LEFT | ES_AUTOHSCROLL, 10, 10, 200, 20, hWnd, NULL, hInstance, NULL);
     HWND hButton1 = CreateWindowEx(0, _T("BUTTON"), _T("1"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 40, 100, 20, hWnd, (HMENU)1, hInstance, NULL);
     HWND hButton2 = CreateWindowEx(0, _T("BUTTON"), _T("2"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 70, 100, 20, hWnd, (HMENU)2, hInstance, NULL);
-    HWND hButton3 = CreateWindowEx(0, _T("BUTTON"), _T("3"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 100, 100, 20, hWnd, (HMENU)3, hInstance, NULL);
-    HWND hButton4 = CreateWindowEx(0, _T("BUTTON"), _T("4"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 130, 100, 20, hWnd, (HMENU)4, hInstance, NULL);
-    HWND hButton5 = CreateWindowEx(0, _T("BUTTON"), _T("5"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 160, 100, 20, hWnd, (HMENU)5, hInstance, NULL);
-    HWND hButton6 = CreateWindowEx(0, _T("BUTTON"), _T("8"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 190, 100, 20, hWnd, (HMENU)8, hInstance, NULL);
+    HWND hButton3 = CreateWindowEx(0, _T("BUTTON"), _T("3, 4"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 100, 100, 20, hWnd, (HMENU)3, hInstance, NULL);
+    HWND hButton4 = CreateWindowEx(0, _T("BUTTON"), _T("5"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 130, 100, 20, hWnd, (HMENU)4, hInstance, NULL);
+    HWND hButton6 = CreateWindowEx(0, _T("BUTTON"), _T("8"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 190, 100, 20, hWnd, (HMENU)5, hInstance, NULL);
 
     AllocConsole();
     FILE* stream;
@@ -110,10 +109,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             break;
         }
         case 5: 
-        {
-            break;
-        }
-        case 8: 
         {
 
             printf("\nSystem information:\n");
