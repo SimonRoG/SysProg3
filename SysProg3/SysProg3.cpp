@@ -107,29 +107,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
         }
         case 5: 
         {
-            LPCWSTR applicationName = L"C:\\FILE\\cutable.exe";
-            LPWSTR commandLine = nullptr;
-            LPSECURITY_ATTRIBUTES processAttributes = nullptr;
-            LPSECURITY_ATTRIBUTES threadAttributes = nullptr;
-            BOOL inheritHandles = FALSE;
-            DWORD creationFlags = 0;
-            LPVOID environment = nullptr;
-            LPCWSTR currentDirectory = nullptr;
-            STARTUPINFOW startupInfo;
-            ZeroMemory(&startupInfo, sizeof(startupInfo));
-            startupInfo.cb = sizeof(startupInfo);
-            HANDLE hProcess = nullptr;
-            HANDLE hThread = nullptr;
-
-            if (CreateProcessW(applicationName, commandLine, processAttributes, threadAttributes, inheritHandles, creationFlags, environment, currentDirectory, &startupInfo, nullptr)) {
-
-                CloseHandle(hProcess);
-                CloseHandle(hThread);
-            }
-            else {
-                // Произошла ошибка при создании дочернего процесса
-
-            }
             break;
         }
         case 6: 
