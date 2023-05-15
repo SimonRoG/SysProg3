@@ -28,9 +28,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     HWND hButton3 = CreateWindowEx(0, _T("BUTTON"), _T("3"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 100, 100, 20, hWnd, (HMENU)3, hInstance, NULL);
     HWND hButton4 = CreateWindowEx(0, _T("BUTTON"), _T("4"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 130, 100, 20, hWnd, (HMENU)4, hInstance, NULL);
     HWND hButton5 = CreateWindowEx(0, _T("BUTTON"), _T("5"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 160, 100, 20, hWnd, (HMENU)5, hInstance, NULL);
-    HWND hButton6 = CreateWindowEx(0, _T("BUTTON"), _T("6"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 190, 100, 20, hWnd, (HMENU)6, hInstance, NULL);
+    HWND hButton6 = CreateWindowEx(0, _T("BUTTON"), _T("8"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 190, 100, 20, hWnd, (HMENU)8, hInstance, NULL);
 
+    AllocConsole();
+    FILE* stream;
+    freopen_s(&stream, "CONOUT$", "w", stdout);
     ShowWindow(hWnd, nCmdShow);
+
     MSG msg = {};
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
@@ -93,7 +97,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
                 if (hFind != INVALID_HANDLE_VALUE) {
                     do {
                         if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-                            SetWindowText(hEdit, fd.cFileName);
+                            wprintf(L"%ls\n", fd.cFileName);
                         }
                     } while (FindNextFileW(hFind, &fd));
                     FindClose(hFind);
@@ -109,13 +113,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
         {
             break;
         }
-        case 6: 
+        case 8: 
         {
-            AllocConsole(); 
-            FILE* stream;
-            freopen_s(&stream, "CONOUT$", "w", stdout);
 
-            printf("System information:\n");
+            printf("\nSystem information:\n");
             printf("PID of current process: %d\n", GetCurrentProcessId());
             printf("PPID of current process: %d\n", GetCurrentProcessId());
 
