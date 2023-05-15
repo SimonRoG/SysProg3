@@ -111,26 +111,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
         }
         case 6: 
         {
-            // Виведення початкових даних
+            AllocConsole(); 
+            FILE* stream;
+            freopen_s(&stream, "CONOUT$", "w", stdout);
+
             printf("System information:\n");
             printf("PID of current process: %d\n", GetCurrentProcessId());
             printf("PPID of current process: %d\n", GetCurrentProcessId());
 
-            // Виведення інформації про процеси
             HANDLE hProcessSnap;
             PROCESSENTRY32 pe32;
-
             hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-            if (hProcessSnap == INVALID_HANDLE_VALUE)
-            {
+            if (hProcessSnap == INVALID_HANDLE_VALUE) {
                 printf("Error: CreateToolhelp32Snapshot (of processes)\n");
                 return 1;
             }
-
             pe32.dwSize = sizeof(PROCESSENTRY32);
-
-            if (!Process32First(hProcessSnap, &pe32))
-            {
+            if (!Process32First(hProcessSnap, &pe32)) {
                 printf("Error: Process32First\n");
                 CloseHandle(hProcessSnap);
                 return 1;
@@ -138,21 +135,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 
             printf("\nProcess list:\n");
 
-            do
-            {
+            do {
                 printf("Process ID: %d, Parent Process ID: %d, Name: %ls\n", pe32.th32ProcessID, pe32.th32ParentProcessID, pe32.szExeFile);
             } while (Process32Next(hProcessSnap, &pe32));
-
             CloseHandle(hProcessSnap);
-
-            // Виведення змінних оточення
             LPWSTR lpszVariable;
             LPTCH lpvEnv;
-
             lpvEnv = GetEnvironmentStringsW();
-
-            if (lpvEnv == NULL)
-            {
+            if (lpvEnv == NULL) {
                 printf("Error: GetEnvironmentStringsW\n");
                 return 1;
             }
@@ -160,22 +150,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             printf("\nEnvironment variables:\n");
 
             lpszVariable = (LPWSTR)lpvEnv;
-
-            while (*lpszVariable)
-            {
+            while (*lpszVariable) {
                 wprintf(L"%s\n", lpszVariable);
                 lpszVariable += wcslen(lpszVariable) + 1;
             }
-
             FreeEnvironmentStringsW(lpvEnv);
 
-            // Виведення результатів змін
             int a = 5;
             int b = 10;
             int c = a + b;
-
             printf("\nResults of changes:\n");
             printf("a = %d, b = %d, c = %d\n", a, b, c);
+
             break;
         }
 
