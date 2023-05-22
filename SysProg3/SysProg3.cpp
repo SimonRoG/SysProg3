@@ -167,13 +167,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
             if (hProcessSnap == INVALID_HANDLE_VALUE) {
                 printf("Error: CreateToolhelp32Snapshot (of processes)\n");
-                return 1;
+                break;
             }
             pe32.dwSize = sizeof(PROCESSENTRY32);
             if (!Process32First(hProcessSnap, &pe32)) {
                 printf("Error: Process32First\n");
                 CloseHandle(hProcessSnap);
-                return 1;
+                break;
             }
 
             printf("\nProcess list:\n");
@@ -187,7 +187,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
             lpvEnv = GetEnvironmentStringsW();
             if (lpvEnv == NULL) {
                 printf("Error: GetEnvironmentStringsW\n");
-                return 1;
+                break;
             }
 
             printf("\nEnvironment variables:\n");
