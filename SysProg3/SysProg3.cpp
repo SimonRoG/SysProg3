@@ -114,7 +114,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
         {
             HANDLE hPipeRead, hPipeWrite;
             PROCESS_INFORMATION pi;
-            STARTUPINFO si;
+            STARTUPINFO si = { sizeof(si) };
             char buffer[BUFFER_SIZE];
             DWORD bytesRead, bytesWritten;
             if (!CreatePipe(&hPipeRead, &hPipeWrite, NULL, 0))
@@ -127,9 +127,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
                 cout << "Failed to set handle information.\n";
                 break;
             }
-            ZeroMemory(&si, sizeof(STARTUPINFO));
-            si.cb = sizeof(STARTUPINFO);
-            ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
             if (!CreateProcess(L"C:\\Users\\Simon\\source\\repos\\SysProg2\\x64\\Debug\\SysProg2.exe", nullptr, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi))
             {
                 cout << "Failed to create child process.\n";
