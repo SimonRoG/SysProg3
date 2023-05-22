@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <tlhelp32.h>
 #include "Header.h"
+#define BUFFER_SIZE 1024
 
 using namespace std;
 
@@ -27,7 +28,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     HWND hButton2 = CreateWindowEx(0, _T("BUTTON"), _T("2"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 70, 100, 20, hWnd, (HMENU)2, hInstance, NULL);
     HWND hButton3 = CreateWindowEx(0, _T("BUTTON"), _T("3, 4"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 100, 100, 20, hWnd, (HMENU)3, hInstance, NULL);
     HWND hButton4 = CreateWindowEx(0, _T("BUTTON"), _T("5"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 130, 100, 20, hWnd, (HMENU)4, hInstance, NULL);
-    HWND hButton6 = CreateWindowEx(0, _T("BUTTON"), _T("8"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 160, 100, 20, hWnd, (HMENU)5, hInstance, NULL);
+    HWND hButton5 = CreateWindowEx(0, _T("BUTTON"), _T("6"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 160, 100, 20, hWnd, (HMENU)5, hInstance, NULL);
+    HWND hButton6 = CreateWindowEx(0, _T("BUTTON"), _T("8"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 190, 100, 20, hWnd, (HMENU)6, hInstance, NULL);
 
     AllocConsole();
     FILE* stream;
@@ -110,7 +112,52 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
         }
         case 5: 
         {
+            HANDLE hPipeRead, hPipeWrite;
+            PROCESS_INFORMATION pi;
+            STARTUPINFO si;
+            char buffer[BUFFER_SIZE];
+            DWORD bytesRead, bytesWritten;
+            if (!CreatePipe(&hPipeRead, &hPipeWrite, NULL, 0))
+            {
+                cout << "Failed to create anonymous pipe.\n";
+                break;
+            }
+            if (!SetHandleInformation(hPipeRead, HANDLE_FLAG_INHERIT, 0))
+            {
+                cout << "Failed to set handle information.\n";
+                break;
+            }
+            ZeroMemory(&si, sizeof(STARTUPINFO));
+            si.cb = sizeof(STARTUPINFO);
+            ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
+            if (!CreateProcess(L"C:\\Users\\Simon\\source\\repos\\SysProg2\\x64\\Debug\\SysProg2.exe", nullptr, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi))
+            {
+                cout << "Failed to create child process.\n";
+                break;
+            }
+            const char* file1 = "C:\\FILE21\\FILE22\\input.txt";
+            const char* file2 = "C:\\FILE21\\FILE22\\output.txt";
 
+            WriteFile(hPipeWrite, file1, strlen(file1), &bytesWritten, NULL);
+            WriteFile(hPipeWrite, "\n", 1, &bytesWritten, NULL);
+            WriteFile(hPipeWrite, file2, strlen(file2), &bytesWritten, NULL);
+            CloseHandle(hPipeWrite);
+
+            while (ReadFile(hPipeRead, buffer, BUFFER_SIZE, &bytesRead, NULL) && bytesRead > 0)
+            {
+                buffer[bytesRead] = '\0';
+                cout << buffer << endl;
+                ZeroMemory(buffer, BUFFER_SIZE);
+            }
+            CloseHandle(hPipeRead);
+            WaitForSingleObject(pi.hProcess, INFINITE);
+            CloseHandle(pi.hProcess);
+            CloseHandle(pi.hThread);
+
+            break;
+        }
+        case 6: 
+        {
             printf("\nSystem information:\n");
             printf("PID of current process: %d\n", GetCurrentProcessId());
             printf("PPID of current process: %d\n", GetCurrentProcessId());
